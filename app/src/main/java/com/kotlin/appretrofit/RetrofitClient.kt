@@ -3,12 +3,12 @@ package com.kotlin.appretrofit
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class RetrofitClient {
-    private val baseURL = BuildConfig.BASE_URL
+object RetrofitClient {
+    private const val BASE_URL = BuildConfig.BASE_URL
 
-    val instance: Api by lazy {
+    val apiInstance: Api by lazy {
         val retrofit = Retrofit.Builder()
-            .baseUrl(baseURL)
+            .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
