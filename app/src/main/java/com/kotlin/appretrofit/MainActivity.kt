@@ -18,17 +18,42 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        viewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(PostViewModel::class.java)
+
+        showPost(binding)
+
+        //createPost(binding)
+    }
+
+    private fun createPost(binding: ActivityMainBinding) {
+        // adapter untuk CreatePOstRequest belum dibuat
+        viewModel.createPostData()
+
+        viewModel.getCreatePostData().observe(this, {
+            if (it != null) {
+                binding.apply {
+                    val responseText = "Response : ${viewModel.getResponseCode()}\n" +
+                            "Title : ${it.title}\n" +
+                            "Body : ${it.text}\n" +
+                            "UserId : ${it.userId}\n" +
+                            "Id Generate From System : ${it.id}\n"
+
+                    tvResponseCode.text = responseText
+                }
+            }
+        })
+    }
+
+    private fun showPost(binding: ActivityMainBinding) {
+        viewModel.setPostData()
         adapter = PostAdapter()
         adapter.notifyDataSetChanged()
 
-        viewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(PostViewModel::class.java)
-
         binding.apply {
-            tvResponseCode.text = "JSON Placeholder"
             rvPost.setHasFixedSize(true)
             rvPost.layoutManager = LinearLayoutManager(this@MainActivity)
             rvPost.adapter = adapter
-            viewModel.setPostData()
+            tvResponseCode.text = "Response Code JSON Placeholder : ${viewModel.getResponseCode()}"
         }
 
         viewModel.getPostData().observe(this, {
