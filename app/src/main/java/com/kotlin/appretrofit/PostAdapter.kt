@@ -25,7 +25,8 @@ class PostAdapter: RecyclerView.Adapter<PostAdapter.PostViewHolder>() {
                 binding.apply {
                     val text = "ID : ${postResponse.id}\n" +
                             "TITLE : ${postResponse.title}\n" +
-                            "TEXT : ${postResponse.text}"
+                            "TEXT : ${postResponse.text}\n" +
+                            "USER_ID : ${postResponse.userId}"
 
                     tvText.text = text
                 }

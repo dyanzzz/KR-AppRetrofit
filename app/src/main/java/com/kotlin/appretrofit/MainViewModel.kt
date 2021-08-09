@@ -17,8 +17,16 @@ class MainViewModel: ViewModel() {
 
     // function setter
     fun setPostData() {
+
+        val parameters = HashMap<String, String>()
+        parameters["userId"] = "4"
+        parameters["id"] = "32"
+
         RetrofitClient.apiInstance
-            .getAllPosts()
+            //.getAllPosts()                                // show all post
+            .getAllPostsWithQueryParams(4, 32)     // show all post with query param in API
+            //.getPosts(parameters)                     // show all post by query param with hashmap
+            //.getPostComments("/posts?userId=4&id=32") // show all post by param URL in activity
             .enqueue(object : Callback<ArrayList<PostResponse>>{
                 override fun onResponse(
                     call: Call<ArrayList<PostResponse>>,

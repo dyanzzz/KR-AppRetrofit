@@ -21,11 +21,11 @@ class MainActivity : AppCompatActivity() {
 
         viewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(MainViewModel::class.java)
 
-        //showPost(binding)
+        showPost(binding)
 
         //createPost(binding)
 
-        showComments(binding)
+        //showComments(binding)
     }
 
     private fun showComments(binding: ActivityMainBinding) {
