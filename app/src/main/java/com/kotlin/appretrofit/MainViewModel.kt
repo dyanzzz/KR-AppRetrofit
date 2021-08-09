@@ -7,11 +7,12 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class PostViewModel: ViewModel() {
+class MainViewModel: ViewModel() {
 
     // ini merupakan mutable live data yg merupakan arraylist dari data post
     val listPost = MutableLiveData<ArrayList<PostResponse>>()
     val listCreatePost = MutableLiveData<CreatePostResponse>()
+    val listComment = MutableLiveData<ArrayList<CommentResponse>>()
     private var responseCode: Int = 0
 
     // function setter
@@ -63,6 +64,27 @@ class PostViewModel: ViewModel() {
             })
     }
 
+    fun showComment() {
+        RetrofitClient.apiInstance
+            .getCommentByPostId(2)
+            .enqueue(object : Callback<ArrayList<CommentResponse>>{
+                override fun onResponse(
+                    call: Call<ArrayList<CommentResponse>>,
+                    response: Response<ArrayList<CommentResponse>>
+                ) {
+                    if (response.isSuccessful) {
+                        listComment.postValue(response.body())
+                        responseCode = response.code()
+                    }
+                    println("### Response : ${response.body()}")
+                }
+
+                override fun onFailure(call: Call<ArrayList<CommentResponse>>, t: Throwable) {
+                    println("##### Failure : ${t.message}")
+                }
+            })
+    }
+
     fun getResponseCode(): Int {
         println("##### ResponseCode $responseCode")
         return responseCode
@@ -76,5 +98,10 @@ class PostViewModel: ViewModel() {
     fun getPostData(): LiveData<ArrayList<PostResponse>>{
         println("##### PostData $listPost")
         return listPost
+    }
+
+    fun getComment(): LiveData<ArrayList<CommentResponse>>{
+        println("##### getComment $listComment")
+        return listComment
     }
 }

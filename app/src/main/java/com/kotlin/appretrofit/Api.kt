@@ -7,6 +7,9 @@ interface Api {
     @GET("/posts")
     fun getAllPosts(): Call<ArrayList<PostResponse>>
 
+    @GET("/posts/{id}/comments")
+    fun getCommentByPostId(@Path("id") postId: Int): Call<ArrayList<CommentResponse>>
+
     @POST("/posts")
     @FormUrlEncoded
     fun createPost(

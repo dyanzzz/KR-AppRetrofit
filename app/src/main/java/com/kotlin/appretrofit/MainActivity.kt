@@ -9,8 +9,9 @@ import com.kotlin.appretrofit.databinding.ActivityMainBinding
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private lateinit var viewModel: PostViewModel
+    private lateinit var viewModel: MainViewModel
     private lateinit var adapter: PostAdapter
+    private lateinit var adapterComment: CommentAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -18,11 +19,32 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        viewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(PostViewModel::class.java)
+        viewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(MainViewModel::class.java)
 
-        showPost(binding)
+        //showPost(binding)
 
         //createPost(binding)
+
+        showComments(binding)
+    }
+
+    private fun showComments(binding: ActivityMainBinding) {
+        viewModel.showComment()
+        adapterComment = CommentAdapter()
+        adapterComment.notifyDataSetChanged()
+
+        binding.apply {
+            rvPost.setHasFixedSize(true)
+            rvPost.layoutManager = LinearLayoutManager(this@MainActivity)
+            rvPost.adapter = adapterComment
+            tvResponseCode.text = "Comment Response code JSON Placeholder : ${viewModel.getResponseCode()}"
+        }
+
+        viewModel.getComment().observe(this, {
+            if (it != null) {
+                adapterComment.setListComment(it)
+            }
+        })
     }
 
     private fun createPost(binding: ActivityMainBinding) {
