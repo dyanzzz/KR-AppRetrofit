@@ -24,7 +24,21 @@ class MainActivity : AppCompatActivity() {
         //showPost(binding)
         //createPost(binding)
         //showComments(binding)
-        updatePost(binding)
+        //updatePost(binding)
+        deletePost(binding)
+    }
+    private fun deletePost(binding: ActivityMainBinding){
+        viewModel.deletePostData()
+
+        viewModel.deleteResponse().observe(this, {
+            if (it != null) {
+                binding.apply {
+                    val responseText = "Response : ${viewModel.getResponseCode()}\n"
+
+                    tvResponseCode.text = responseText
+                }
+            }
+        })
     }
 
     private fun updatePost(binding: ActivityMainBinding) {

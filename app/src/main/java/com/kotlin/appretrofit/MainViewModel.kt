@@ -14,6 +14,7 @@ class MainViewModel: ViewModel() {
     val listCreatePost = MutableLiveData<CreatePostResponse>()
     val listComment = MutableLiveData<ArrayList<CommentResponse>>()
     val updatePost = MutableLiveData<PostResponse>()
+    val deletePost = MutableLiveData<Void>()
     private var responseCode: Int = 0
 
     // function setter
@@ -126,6 +127,30 @@ class MainViewModel: ViewModel() {
             })
     }
 
+    fun deletePostData() {
+        RetrofitClient.apiInstance
+            .deletePost(
+                1
+            )
+            .enqueue(object : Callback<Void>{
+                override fun onResponse(
+                    call: Call<Void>,
+                    response: Response<Void>
+                ) {
+                    if (response.isSuccessful) {
+                        deletePost.postValue(response.body())
+                        responseCode = response.code()
+                    }
+                    println("### Response code : ${response.code()}")
+                }
+
+                override fun onFailure(call: Call<Void>, t: Throwable) {
+                    println("##### Failure : ${t.message}")
+                }
+
+            })
+    }
+
     fun getResponseCode(): Int {
         println("##### ResponseCode $responseCode")
         return responseCode
@@ -148,5 +173,9 @@ class MainViewModel: ViewModel() {
 
     fun getUpdateResponse(): LiveData<PostResponse>{
         return updatePost
+    }
+
+    fun deleteResponse(): LiveData<Void>{
+        return deletePost
     }
 }
