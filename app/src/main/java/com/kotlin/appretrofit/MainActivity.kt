@@ -21,11 +21,28 @@ class MainActivity : AppCompatActivity() {
 
         viewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(MainViewModel::class.java)
 
-        showPost(binding)
-
+        //showPost(binding)
         //createPost(binding)
-
         //showComments(binding)
+        updatePost(binding)
+    }
+
+    private fun updatePost(binding: ActivityMainBinding) {
+        viewModel.updatePostData()
+
+        viewModel.getUpdateResponse().observe(this, {
+            if (it != null) {
+                binding.apply {
+                    val responseText = "Response : ${viewModel.getResponseCode()}\n" +
+                            "Title : ${it.title}\n" +
+                            "Body : ${it.text}\n" +
+                            "UserId : ${it.userId}\n" +
+                            "Update data yg memiliki Id : ${it.id}\n"
+
+                    tvResponseCode.text = responseText
+                }
+            }
+        })
     }
 
     private fun showComments(binding: ActivityMainBinding) {

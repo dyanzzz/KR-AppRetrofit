@@ -34,4 +34,24 @@ interface Api {
         @Field("title") title: String,
         @Field("body") body: String
     ): Call<CreatePostResponse>
+
+    @FormUrlEncoded
+    @PUT("/posts/{id}")
+    fun putPost(
+        @Path("id") id: Int,
+        @Field("userId") userId: Int,
+        @Field("id") idField: Int,
+        @Field("title") title: String?,
+        @Field("body") body: String?
+    ): Call<PostResponse>
+
+    @FormUrlEncoded
+    @PATCH("/posts/{id}")
+    fun patchPost(
+        @Path("id") id: Int,
+        @Field("userId") userId: Int,
+        @Field("id") idField: Int,
+        @Field("title") title: String?,
+        @Field("body") body: String?
+    ): Call<PostResponse>
 }

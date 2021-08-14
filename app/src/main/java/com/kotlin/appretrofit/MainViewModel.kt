@@ -13,6 +13,7 @@ class MainViewModel: ViewModel() {
     val listPost = MutableLiveData<ArrayList<PostResponse>>()
     val listCreatePost = MutableLiveData<CreatePostResponse>()
     val listComment = MutableLiveData<ArrayList<CommentResponse>>()
+    val updatePost = MutableLiveData<PostResponse>()
     private var responseCode: Int = 0
 
     // function setter
@@ -93,6 +94,38 @@ class MainViewModel: ViewModel() {
             })
     }
 
+    fun updatePostData() {
+        RetrofitClient.apiInstance
+            // menggunakan put & patch
+            // jika put, value null akan tetap diubah menjadi null
+            // jika patch, value null tidak akan diubah, dan akan dikembalikan ke vallue sebelumnya
+            .putPost(
+            //.patchPost(
+                5,
+                4,
+                5,
+                null,
+                "ini text yg sudah diubah"
+            )
+            .enqueue(object : Callback<PostResponse>{
+                override fun onResponse(
+                    call: Call<PostResponse>,
+                    response: Response<PostResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        updatePost.postValue(response.body())
+                        responseCode = response.code()
+                    }
+                    println("### Response : ${response.body()}")
+                }
+
+                override fun onFailure(call: Call<PostResponse>, t: Throwable) {
+                    println("##### Failure : ${t.message}")
+                }
+
+            })
+    }
+
     fun getResponseCode(): Int {
         println("##### ResponseCode $responseCode")
         return responseCode
@@ -111,5 +144,9 @@ class MainViewModel: ViewModel() {
     fun getComment(): LiveData<ArrayList<CommentResponse>>{
         println("##### getComment $listComment")
         return listComment
+    }
+
+    fun getUpdateResponse(): LiveData<PostResponse>{
+        return updatePost
     }
 }
